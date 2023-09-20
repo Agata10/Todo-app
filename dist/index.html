@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="style.css">
     <script defer src='main.js'></script>
 </head>
+
 <body>
     <header>
         <img src="./images/check2-square.svg" alt="logo">
@@ -17,18 +19,20 @@
     </header>
     <main>
         <div class="sidebar">
-            <h1>Projects</h1>  
-            <ul class="projects-list">
-                <li>Family</li>
-                <li>Work</li>
-                <li>      <button class="add-project-btn">
-                    <img src="./images/plus.svg" alt="plus icon">
-                    Add Project</button></li>
-            </ul>
-      
+            <div class="first-row">
+                <h1>Projects</h1>
+                <ul class="projects-list">
+                    <li>Family<span class="delete-project">x</span></li>
+                    <li>Work<span class="delete-project">x</span></li>
+                </ul>
                 <button class="add-project-btn">
                     <img src="./images/plus.svg" alt="plus icon">
                     Add Project</button>
+                <div class="form-div"></div>
+            </div>
+            <button class="add-todo-btn">
+                <img src="./images/plus.svg" alt="plus icon">
+                Add Todo</button>
         </div>
         <div class="main-content">
             <div class="todo-content"></div>
@@ -36,4 +40,5 @@
         </div>
     </main>
 </body>
+
 </html>

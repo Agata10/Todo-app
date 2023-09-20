@@ -1,3 +1,5 @@
-import log from "./project";
+import Project from "./project";
+import addProject from "./DOM";
 
-log();
+let project = new Project('Gym');
+addProject();

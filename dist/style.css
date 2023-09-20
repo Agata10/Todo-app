@@ -60,25 +60,63 @@ main {
 /** SIDEBAR **/
 
 .sidebar {
-    width: 250px;
+    width: 200px;
     height: calc(100vh - 70px);
     box-shadow: 0px 10px 10px 10px rgb(245, 241, 241, 0.5);
     padding-top: 40px;
     display: grid;
-    grid-template-rows: 0.5fr 5fr 1fr;
+    grid-template-rows: 5fr 1fr;
+   
+}
+
+.first-row {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    gap: 3px;
+    margin: 0 auto;
 }
 
 .sidebar h1 {
     font-family: var(--nav-basic-font);
     font-weight: 300;
     font-size: 1.8rem;
-    padding-left: 20px;
 }
 
 ul {
-    margin-left: auto;
-    margin-right: auto;
     list-style-type: none;
+    padding-left: 20px;
+}
+
+ul li {
+    font-family: var(--nav-basic-font);
+    font-weight: 300;
+    font-size: 1.5rem;
+    position: relative;
+    margin-top: -1px;
+}
+
+ul li:hover {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    padding-left: 5px;
+}
+
+li span {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    padding: 1px 12px;
+    transform: translate(0%, -50%);
+    display: none;
+}
+
+ul li:hover span {
+    display: block;
+}
+span:hover {
+    background-color: rgb(191, 198, 205, 0.2);
 }
 
 .add-project-btn {
@@ -90,9 +128,19 @@ ul {
     border: none;
     border-radius: 8px;
     border-top: 1px solid var(--main-color);
+    margin-top: 8px;
 }
 
-.add-project-btn img {
+.hidden {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.add-project-btn img,
+.add-todo-btn img {
     width: 36px;
     height: 36px;
 
@@ -100,8 +148,10 @@ ul {
     top: 10px;
 }
 
+
 .add-project-btn:hover {
     transform: scale(1.1);
+    cursor: pointer;
 }
 
 /** TODO LIST CONTENT **/
@@ -109,14 +159,10 @@ ul {
 .main-content {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(100vw - 200px);
     min-height: calc(100%);
 }
 
-.todo-content {
-   
-   
-}
 
 /** FOOTER **/
 
