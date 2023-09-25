@@ -1,13 +1,34 @@
-import { functionsIn } from "lodash";
+
 import Project from "./project";
 
+class Projects {
+    constructor() {
+        this.projects = [];
+    }
+
+    getProjects() {
+        return this.projects;
+    }
+
+    addProject(project) {
+        return this.projects.push(project)
+    }
+
+    removeProject(projectName) {
+        this.projects.filter((project, index) => {
+            if (project.getName() === projectName) {
+                return this.projects.splice(index, 1);
+            }
+        });
+    }
+}
 
 function appendNeWProject(project) {
-    let ul = document.querySelector('.projects-list');
-    let list = document.createElement('li');
+    const ul = document.querySelector('.projects-list');
+    const list = document.createElement('li');
     list.textContent = project.getName();
-    
-    let deleteSpan = document.createElement('span');
+
+    const deleteSpan = document.createElement('span');
     deleteSpan.classList.add('delete-project');
     deleteSpan.textContent = 'x';
 
@@ -24,57 +45,89 @@ function rmActiveClass(elem) {
     return elem;
 }
 
-function removeProject() {
-    let removeBtns = document.querySelectorAll('.delete-project');
-
-    removeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.parentNode.remove();
-        })
-    })
+function showAddProjectForm() {
+    const form = document.querySelector('#project-form');
+    form.classList.add('active');
+    form.classList.remove('hidden');
 }
 
+function updateProjects(projects) {
+    const input = document.getElementById('project-input');
+    const newProject = new Project(input.value);
+    projects.addProject(newProject);
+    appendNeWProject(newProject);
+}
+
+function removeSpanParent(event) { //remove project from DOM list
+    if (event.target.tagName == "SPAN") {
+        let span = event.target, li = span.parentNode, ul = li.parentNode;
+        let projectName = li.textContent.replace('x', '');
+        event.currentTarget.myProjects.removeProject(projectName);
+        ul.removeChild(li);
+    }
+}
+
+
 export default function addProject() {
-    let addProjectBtn = document.querySelector('.add-project-btn');
-    let div = document.querySelector('.form-div');
-    
+    const addProjectBtn = document.querySelector('.add-project-btn');
+    const cancelBtn = document.getElementById('cancel-add-project');
+    let projects = new Projects();
 
-    addProjectBtn.addEventListener('click', () => {
-        div.innerHTML = `
-        <form id="project-form"> 
-            <input type="text" id="project-input" name="project-input" minlength="3" maxlength="10" placeholder="Project Name.." required>
-            <button value="cancel" id="cancel-add-project">Cancel</button>
-            <button type="submit" id="confirm-add-project">Add</button>
-        </form>`
-        let form = document.querySelector('#project-form');
-        form.classList.add('active');
-        form.classList.remove('hidden');
 
-        let cancelBtn = document.getElementById('cancel-add-project');
-      
-        cancelBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            rmActiveClass(form);
-        });
+    const form = document.querySelector('#project-form');
 
-        let input = document.getElementById('project-input');
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const newProject = new Project(input.value);
-            appendNeWProject(newProject);
-            rmActiveClass(form);
-            removeProject();
-        });
 
-        form.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                e.preventDefault();
-                const newProject = new Project(input.value);
-                appendNeWProject(newProject);
-                rmActiveClass(form);
-                removeProject();
-            }
-        });
+    addProjectBtn.addEventListener('click', showAddProjectForm);
+    document.addEventListener('click', removeSpanParent); //rmeove project from list
+    document.myProjects = projects;
+
+    cancelBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        rmActiveClass(form);
     });
- 
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        updateProjects(projects);
+        rmActiveClass(form);
+    });
+
+    form.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            updateProjects(projects);
+            rmActiveClass(form);
+        }
+    });
+
+    //  const removeBtns = document.querySelectorAll('.delete-project');
+    //     removeBtns.forEach(span => {
+    //         span.addEventListener('click', (e) => {
+
+    //             let projectLi = span.parentNode;
+    //             let projectUl = projectLi.parentNode;
+    //             let projectName = projectLi.textContent.replace('x', '');
+    //             projectUl.removeChild(projectLi);
+    //             projects.removeProject(projectName);
+    //             console.log('hej');
+    //         });
+    //     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    console.log(projects);
 }
