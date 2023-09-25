@@ -190,6 +190,20 @@ span:hover {
     min-height: calc(100%);
 }
 
+.add-todo-btn {
+    width: 150px;
+    height: 60px;
+    margin: 0 auto;
+    background-color: var(--main-color);
+    color: whitesmoke;
+    font-family: var(--nav-basic-font);
+    font-size: 1.2rem;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+
+}
 
 /** FOOTER **/
 
