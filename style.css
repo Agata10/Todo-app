@@ -115,6 +115,7 @@ li span {
 ul li:hover span {
     display: block;
 }
+
 span:hover {
     background-color: rgb(191, 198, 205, 0.2);
 }
@@ -152,6 +153,32 @@ span:hover {
 .add-project-btn:hover {
     transform: scale(1.1);
     cursor: pointer;
+}
+
+/* FORM TO ADD PROJECT */
+#project-form {
+    justify-content: center;
+    align-items: center;
+}
+
+#project-form input {
+    width: 150px;
+    font-family: var(--nav-basic-font);
+    font-size: 1rem;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid var(--main-color);
+}
+
+#project-form button {
+    width: 70px;
+    height: 30px;
+    font-family: var(--nav-basic-font);
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
 }
 
 /** TODO LIST CONTENT **/
