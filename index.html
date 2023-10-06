@@ -35,8 +35,44 @@
                 <img src="./images/plus2.svg" alt="plus icon">
                 Add Todo</button>
         </div>
+        <dialog id="todoDialog">
+            <form id="todoForm" name="todoForm" method="post">
+              <input type="text" id="title-input" minlength="3" maxlength="10" placeholder="Title..." required>
+              <input type="texarea" id="description-input" minlength="3" maxlength="30" placeholder="Description...">
+              <input type="date" id="date-input" required>
+              <label for="priority-select">Choose priority:</label>
+              <select name="priority" id="priority-select">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+              </select>
+              <div>
+                <button id="closeBtn" type="button">Cancel</button>
+                <button id="confirmBtn" type="submit">Confirm</button>
+              </div>
+            </form>
+          </dialog>
         <div class="main-content">
-            <div class="todo-content"></div>
+            <div class="todo-content">
+                <div id="priority"></div>
+                <div id="info">
+                    <div id="title">Laundry</div>
+                    <div id="description" class="">do launry or be naked</div>
+                </div>
+                <div id="edit"><button>edit</button></div>
+                <div id="date">10/10/2022</div>
+                <div id="delete"><button>delete</button></div>
+            </div>
+            <div class="todo-content">
+                <div id="priority"></div>
+                <div id="info">
+                    <div id="title">Laundry</div>
+                    <div id="description" class="">do launry or be naked</div>
+                </div>
+                <div id="edit"><button>edit</button></div>
+                <div id="date">10/10/2022</div>
+                <div id="delete"><button>delete</button></div>
+            </div>
             <footer>Agata Deter &copy Copyright 2023</footer>
         </div>
     </main>
