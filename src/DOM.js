@@ -1,133 +1,90 @@
-
 import Project from "./project";
+import Todo from "./Todo";
 
-class Projects {
-    constructor() {
-        this.projects = [];
-    }
-
-    getProjects() {
-        return this.projects;
-    }
-
-    addProject(project) {
-        return this.projects.push(project)
-    }
-
-    removeProject(projectName) {
-        this.projects.filter((project, index) => {
-            if (project.getName() === projectName) {
-                return this.projects.splice(index, 1);
-            }
-        });
-    }
-}
-
-function appendNeWProject(project) {
-    const ul = document.querySelector('.projects-list');
-    const list = document.createElement('li');
-    list.textContent = project.getName();
-
-    const deleteSpan = document.createElement('span');
-    deleteSpan.classList.add('delete-project');
-    deleteSpan.textContent = 'x';
-
-    list.appendChild(deleteSpan);
-    ul.appendChild(list);
-
-    return ul;
-}
-
-function rmActiveClass(elem) {
-    elem.classList.remove('active');
-    elem.classList.add('hidden');
-
-    return elem;
-}
-
-function showAddProjectForm() {
-    const form = document.querySelector('#project-form');
-    form.classList.add('active');
+function showProjectForm() {
+    const form = document.getElementById('project-form');
     form.classList.remove('hidden');
+    form.classList.add('active');
 }
 
-function updateProjects(projects) {
-    const input = document.getElementById('project-input');
-    const newProject = new Project(input.value);
-    projects.addProject(newProject);
-    appendNeWProject(newProject);
+function cancelProjectForm(e) {
+    e.preventDefault();
+    const form = document.getElementById('project-form');
+    form.classList.add('hidden');
+    form.classList.remove('active');
 }
 
-function removeSpanParent(event) { //remove project from DOM list
-    if (event.target.tagName == "SPAN") {
-        let span = event.target, li = span.parentNode, ul = li.parentNode;
+function addProject(e) {
+    e.preventDefault();
+    const titleInput = document.getElementById('project-input');
+    let todo = e.currentTarget.todo;
+
+    if(todo.getProject(titleInput.value)) {
+        alert('The project with this name already exists!');
+        return;
+    }
+
+    const newProject = new Project(titleInput.value);
+    appendNewProject(newProject.projectTitle);
+    e.currentTarget.todo.addProject(newProject);
+    console.log(todo.getProjects());
+    console.log(titleInput.value);
+    //return newProject;
+}
+
+function appendNewProject(title) {
+    const form = document.getElementById('project-form');
+    const projectsList = document.querySelector('.projects-list');
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+
+    li.textContent = title;
+    span.textContent = 'x';
+    li.appendChild(span);
+    projectsList.appendChild(li);
+    form.classList.add('hidden');
+    form.classList.remove('active');
+}
+
+function deleteProject(e) {
+    if (e.target.tagName == "SPAN") {
+        let span = e.target, li = span.parentNode, ul = li.parentNode;
         let projectName = li.textContent.replace('x', '');
-        event.currentTarget.myProjects.removeProject(projectName);
+        e.currentTarget.todo.removeProject(projectName);
         ul.removeChild(li);
+        console.log(e.currentTarget.todo.getProjects());
     }
 }
 
-
-export default function addProject() {
+export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
-    const cancelBtn = document.getElementById('cancel-add-project');
-    let projects = new Projects();
+    const cancelProjectBtn = document.getElementById('cancel-add-project');
+    const form = document.getElementById('project-form');
+    const deleteBtns = document.querySelectorAll('span');
+    const todo = new Todo();
 
+    appendNewProject(todo.getProjects()[0].title);
+    appendNewProject(todo.getProjects()[1].title);
 
-    const form = document.querySelector('#project-form');
+    addProjectBtn.addEventListener('click', showProjectForm);
+    cancelProjectBtn.addEventListener('click', cancelProjectForm);
+    form.addEventListener('submit', addProject);
+    form.todo = todo;
+    document.addEventListener('click', deleteProject);
+    document.todo = todo;
 
-
-    addProjectBtn.addEventListener('click', showAddProjectForm);
-    document.addEventListener('click', removeSpanParent); //rmeove project from list
-    document.myProjects = projects;
-
-    cancelBtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        rmActiveClass(form);
-    });
-
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        updateProjects(projects);
-        rmActiveClass(form);
-    });
-
+    //bug, enter doesnt submit the form, fix it 
     form.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault();
-            updateProjects(projects);
-            rmActiveClass(form);
+            if(document.getElementById('project-input').value.length < 3){
+                alert('Enter title with 3 or more letters!');
+            }else {
+                addProject(e);
+            }
         }
     });
 
-    //  const removeBtns = document.querySelectorAll('.delete-project');
-    //     removeBtns.forEach(span => {
-    //         span.addEventListener('click', (e) => {
-
-    //             let projectLi = span.parentNode;
-    //             let projectUl = projectLi.parentNode;
-    //             let projectName = projectLi.textContent.replace('x', '');
-    //             projectUl.removeChild(projectLi);
-    //             projects.removeProject(projectName);
-    //             console.log('hej');
-    //         });
-    //     });
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    console.log(projects);
 }
