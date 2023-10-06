@@ -189,6 +189,8 @@ span:hover {
     flex-direction: column;
     width: calc(100vw - 200px);
     min-height: calc(100%);
+    padding-top: 20px;
+    gap: 10px;
 }
 
 .add-todo-btn {
@@ -205,6 +207,57 @@ span:hover {
     border-radius: 8px;
 
 }
+
+.todo-content {
+    margin: 0 auto;
+    width: 50%;
+    display: grid;
+    grid-template-columns: 0.5fr 6fr 1fr 2fr 1fr;
+    box-shadow: 4px 4px 3px -3px var(--main-color);
+    align-items: center;
+    height: 50px;
+    font-family: var(--logo-font);
+    font-size: 1rem;  
+}
+
+#priority {
+    background-color: var(--green-color);
+    width: 20px;
+    height: 100%;
+    border: none;
+}
+
+.invisible {
+    display: none;
+    grid-template-rows: 1fr;
+}
+
+#info .visible {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    align-items: center;
+    gap: 2px;
+}
+
+#description {
+    font-size: 0.8rem;
+}
+
+ /** ADD TODO DIALOG **/
+
+ #todoDialog {
+    position: relative;
+    top: 25%;
+    left: 45%;
+ }
+
+ #todoDialog > form{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 400px;
+    height: 350px;
+ }
 
 /** FOOTER **/
 

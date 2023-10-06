@@ -56,11 +56,73 @@ function deleteProject(e) {
     }
 }
 
+function createTodoUI(e) {
+    const container = document.querySelectorAll('.todo-content');
+    let click = false;
+
+    // container.forEach((todo) => {
+    //     todo.currentTarget.addEventListener('click', () => {
+    //         const description = document.getElementById('description');
+    //         const info = document.getElementById('info');
+    //         if(click === false) {
+    //             description.classList.remove('invisible');
+    //             info.classList.add('visible');
+    //             click = true;
+    //         }else {
+    //             click = false;
+    //             info.classList.remove('visible');
+    //             description.classList.add('invisible');
+    //         }
+    //     });
+    // });
+
+}
+
+function appendTodo(project) {
+    const mainContent = document.querySelector('.main-content');
+    const todoContent = document.createElement('div');
+    todoContent.classList.add('todo-content');
+
+    todoContent.innerHTML += `<div id="priority"></div>
+    <div id="info">
+        <div id="title"></div>
+        <div id="description" class=""></div>
+    </div>
+    <div id="edit"><button>edit</button></div>
+    <div id="date"></div>
+    <div id="delete"><button>delete</button></div>`
+
+}
+
+function showAddTodoDialog() {
+    const dialog = document.getElementById('todoDialog');
+    const form = dialog.querySelector('#todoForm');
+    const closeBtn = document.getElementById('closeBtn');
+    dialog.showModal();
+
+    form.addEventListener('submit', (e) => {
+
+        console.log('Title' + document.getElementById('title-input').value);
+        console.log('Description' + document.getElementById('description-input').value);
+        console.log('Date' + document.getElementById('date-input').value);
+        console.log('Prority' + document.getElementById('priority-select').value);
+
+        e.preventDefault();
+        dialog.close();
+    })
+
+    closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        dialog.close();
+    });
+}
+
+
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
     const cancelProjectBtn = document.getElementById('cancel-add-project');
     const form = document.getElementById('project-form');
-    const deleteBtns = document.querySelectorAll('span');
+    const addTodoBtn = document.querySelector('.add-todo-btn');
     const todo = new Todo();
 
     appendNewProject(todo.getProjects()[0].title);
@@ -84,7 +146,8 @@ export default function handleUI() {
         }
     });
 
-
+    document.addEventListener('click', createTodoUI);
+    addTodoBtn.addEventListener('click', showAddTodoDialog);
 
 
 }
