@@ -1,5 +1,6 @@
 import Project from "./project";
 import Todo from "./Todo";
+import Task from "./Task";
 
 function showProjectForm() {
     const form = document.getElementById('project-form');
@@ -78,19 +79,33 @@ function createTodoUI(e) {
 
 }
 
-function appendTodo(project) {
-    const mainContent = document.querySelector('.main-content');
-    const todoContent = document.createElement('div');
-    todoContent.classList.add('todo-content');
+function createTaskfromInput() {
+    const title = document.getElementById('title-input').value;
+    const description = document.getElementById('description-input').value;
+    const dueDate = document.getElementById('date-input').value;
+    const priority = document.getElementById('priority-select').value;
 
-    todoContent.innerHTML += `<div id="priority"></div>
+    let task = new Task(title, description, dueDate, priority);
+    return task;
+}
+
+function appendTask(task) {
+    const conatiner = document.querySelector('.todo-container');
+    const todoContent = document.createElement('div');
+    const priority = document.getElementById('priority-select').value;
+    todoContent.classList.add('todo-content');
+    
+    todoContent.innerHTML = `<div id="priority"></div>
     <div id="info">
-        <div id="title"></div>
-        <div id="description" class=""></div>
+        <div id="title"> `+ task.title +`</div>
+        <div id="description" class="">`+ task.description +`</div>
     </div>
     <div id="edit"><button>edit</button></div>
-    <div id="date"></div>
-    <div id="delete"><button>delete</button></div>`
+    <div id="date">`+ task.dueDate +`</div>
+    <div id="delete"><button>delete</button></div>`;
+   
+    todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(priority);
+    conatiner.appendChild(todoContent);
 
 }
 
@@ -100,19 +115,20 @@ function showAddTodoDialog() {
     const closeBtn = document.getElementById('closeBtn');
     dialog.showModal();
 
-    form.addEventListener('submit', (e) => {
-
-        console.log('Title' + document.getElementById('title-input').value);
-        console.log('Description' + document.getElementById('description-input').value);
-        console.log('Date' + document.getElementById('date-input').value);
-        console.log('Prority' + document.getElementById('priority-select').value);
-
-        e.preventDefault();
-        dialog.close();
-    })
-
     closeBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        dialog.close();
+    });
+}
+
+function sumbitAddTaskForm() {
+    const dialog = document.getElementById('todoDialog');
+    const form = dialog.querySelector('#todoForm');
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let task = createTaskfromInput();
+        appendTask(task);
         dialog.close();
     });
 }
@@ -148,6 +164,7 @@ export default function handleUI() {
 
     document.addEventListener('click', createTodoUI);
     addTodoBtn.addEventListener('click', showAddTodoDialog);
+    sumbitAddTaskForm();
 
 
 }

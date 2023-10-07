@@ -12,5 +12,17 @@ export default class Project {
         this.title = name;
     }
 
+    addTask({title, description, dueDate, priority}) {
+        this.tasks.push({title, description, dueDate, priority});
+    }
+
+    removeTask(title) {
+        this.tasks.filter((task, index) => {
+            if (task.title === title) {
+                return this.tasks.splice(index, 1);
+            }
+        });
+    }
+        
 
 }
