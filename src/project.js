@@ -12,8 +12,12 @@ export default class Project {
         this.title = name;
     }
 
-    addTask({title, description, dueDate, priority}) {
-        this.tasks.push({title, description, dueDate, priority});
+    getTasks() {
+        return this.tasks;
+    }
+
+    addTask(task) {
+        this.tasks.push(task);
     }
 
     removeTask(title) {
