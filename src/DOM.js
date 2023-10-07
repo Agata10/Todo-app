@@ -102,7 +102,7 @@ function appendTask(task) {
     </div>
     <div id="edit"><button>edit</button></div>
     <div id="date">`+ task.dueDate + `</div>
-    <div id="delete"><button>delete</button></div>`;
+    <div id="delete"><button class="delete">delete</button></div>`;
 
     todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(task.priority);
     conatiner.appendChild(todoContent);
@@ -142,13 +142,22 @@ function handleAddingTask(todo) {
 }
 
 function deleteTask(e) {
-    if (e.target.tagName == 'BUTTON') {
-        if (e.target.classList.contains('delete'));
-        let btn = e.target, div = btn.parentNode, contentDiv = div.parentNode, containerDiv = contentDiv.parentNode;
-        //e.currentTarget.task.removeTask(task.title);
-        containerDiv.removeChild(contentDiv);
-        //console.log(e.currentTarget.todo.getProjects());
+    let currentProject = getCurrentProject(e.currentTarget.todo);
+
+    if(e.target.tagName == 'BUTTON'){
+        if(e.target.classList.contains('delete')){
+           
+            let btn = e.target, div = btn.parentNode, contentDiv = div.parentNode, containerDiv = contentDiv.parentNode;
+            let title = contentDiv.childNodes[2].childNodes[1].textContent.trim();
+            currentProject.removeTask(title);
+            console.log(currentProject);
+            containerDiv.removeChild(contentDiv);   
     }
+}
+ 
+        
+        //console.log(e.currentTarget.todo.getProjects());
+    
 }
 
 function updateTasksScreen(todo) {
@@ -257,6 +266,7 @@ export default function handleUI() {
     handleAddingTask(todo);
 
     container.addEventListener('click', deleteTask);
+    container.todo = todo;
 
     handleProjectClick(todo);
 }

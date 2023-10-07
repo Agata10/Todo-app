@@ -6,6 +6,10 @@ export default class Task {
         this.priority = priority;
     }
 
+    get taskTitle() {
+        return this.title;
+    }
+
     checkPriority(priority) {
         let backgroundColor;
 

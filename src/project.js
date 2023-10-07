@@ -17,16 +17,21 @@ export default class Project {
     }
 
     addTask(task) {
-        this.tasks.push(task);
+        return this.tasks.push(task);
     }
 
-    removeTask(title) {
+    removeTask(taskTitle) {
         this.tasks.filter((task, index) => {
-            if (task.title === title) {
+            console.log(taskTitle)
+            console.log(task.taskTitle)
+            if (task.taskTitle === taskTitle) {
                 return this.tasks.splice(index, 1);
             }
         });
+
+
     }
-        
+
+
 
 }
