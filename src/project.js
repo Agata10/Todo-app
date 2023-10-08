@@ -22,8 +22,6 @@ export default class Project {
 
     removeTask(taskTitle) {
         this.tasks.filter((task, index) => {
-            console.log(taskTitle)
-            console.log(task.taskTitle)
             if (task.taskTitle === taskTitle) {
                 return this.tasks.splice(index, 1);
             }

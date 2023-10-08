@@ -27,9 +27,11 @@ function addProject(e) {
 
     const newProject = new Project(titleInput.value);
     appendNewProject(newProject.projectTitle);
-    e.currentTarget.todo.addProject(newProject); //add project to Todo
-    console.log(todo.getProjects());
-    //return newProject;
+    todo.addProject(newProject); //add project to Todo
+    console.log(todo.getProjects()); //delete later
+
+    updateProjectsScreen(newProject.projectTitle); //switch to new project
+    updateTasksScreen(todo);
 }
 
 function appendNewProject(title) {
@@ -46,18 +48,80 @@ function appendNewProject(title) {
     form.classList.remove('active');
 }
 
+
 function deleteProject(e) {
     if (e.target.tagName == 'SPAN') {
         let span = e.target, li = span.parentNode, ul = li.parentNode;
         let projectName = li.textContent.replace('x', '');
         e.currentTarget.todo.removeProject(projectName);
         ul.removeChild(li);
-        console.log(e.currentTarget.todo.getProjects());
+        console.log(e.currentTarget.todo.getProjects()); /// delte later
         inititializeProject(e.currentTarget.todo);
+        updateTasksScreen(e.currentTarget.todo);
     }
 }
 
-function createTodoUI(e) {
+function updateProjectsScreen(title) {
+    const listOfProject = document.querySelector('.projects-list');
+    let projects = listOfProject.childNodes;
+
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].textContent.replace('x', '') == title) {
+            projects[i].classList.add('activeProject');
+            projects[i].classList.remove('disactiveProject');
+        } else {
+            projects[i].classList.add('disactiveProject');
+            projects[i].classList.remove('activeProject');
+        }
+    }
+}
+
+function inititializeProject(todo) {
+    const listOfProject = document.querySelector('.projects-list');
+    let li = listOfProject.childNodes;
+
+    // if((todo.getProjects().length === 0)) {
+    //     console.log(todo.getProjects())
+    //     updateProjectsScreen(li, '');
+    //     return;
+ if(todo.getProjects()[0].title != '') {
+        let title = todo.getProjects()[0].title;
+        updateProjectsScreen(title);
+    }
+}
+
+function handleProjectClick(todo) {
+    const listOfProject = document.querySelector('.projects-list');
+    let li = listOfProject.childNodes;
+
+    listOfProject.addEventListener('click', (e) => {
+        if (e.target.tagName == 'LI') {
+            let title = e.target.textContent.replace('x', '');
+            // let newProject = todo.getProject(title);
+             updateProjectsScreen(title);
+             updateTasksScreen(todo);
+            // return newProject;
+        }
+    });
+}
+
+function getCurrentProject(todo) {
+    const listOfProject = document.querySelector('.projects-list');
+    let li = listOfProject.childNodes;
+    let title;
+    let currentProject;
+
+    for (let i = 0; i < li.length; i++) { 
+        if(li[i].classList.contains('activeProject')) {
+            title = li[i].textContent.replace('x', '');
+            currentProject = todo.getProject(title);
+            return currentProject;
+        }
+    }
+
+}
+
+function showHideDescriptionOnClick(e) {
     const container = document.querySelectorAll('.todo-content');
     let click = false;
 
@@ -92,15 +156,14 @@ function createTaskfromInput() {
 function appendTask(task) {
     const conatiner = document.querySelector('.todo-container');
     const todoContent = document.createElement('div');
-    const priority = document.getElementById('priority-select').value;
     todoContent.classList.add('todo-content');
 
     todoContent.innerHTML = `<div id="priority"></div>
     <div id="info">
-        <div id="title"> `+ task.title + `</div>
+        <div id="title">`+ task.title + `</div>
         <div id="description" class="">`+ task.description + `</div>
     </div>
-    <div id="edit"><button>edit</button></div>
+    <div id="edit"><button class="edit">edit</button></div>
     <div id="date">`+ task.dueDate + `</div>
     <div id="delete"><button class="delete">delete</button></div>`;
 
@@ -148,16 +211,16 @@ function deleteTask(e) {
         if(e.target.classList.contains('delete')){
            
             let btn = e.target, div = btn.parentNode, contentDiv = div.parentNode, containerDiv = contentDiv.parentNode;
-            let title = contentDiv.childNodes[2].childNodes[1].textContent.trim();
+            let title = contentDiv.childNodes[2].childNodes[1].textContent;
             currentProject.removeTask(title);
-            console.log(currentProject);
+            console.log(currentProject); //delete later
             containerDiv.removeChild(contentDiv);   
     }
 }
- 
-        
-        //console.log(e.currentTarget.todo.getProjects());
-    
+}
+
+function editTask() {
+
 }
 
 function updateTasksScreen(todo) {
@@ -173,59 +236,7 @@ function updateTasksScreen(todo) {
 
 }
 
-function updateProjectsScreen(projects, title) {
 
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].textContent.replace('x', '') == title) {
-            projects[i].classList.add('activeProject');
-            projects[i].classList.remove('disactiveProject');
-        } else {
-            projects[i].classList.add('disactiveProject');
-            projects[i].classList.remove('activeProject');
-        }
-    }
-}
-
-function inititializeProject(todo) {
-    const listOfProject = document.querySelector('.projects-list');
-    let li = listOfProject.childNodes;
-
-    if (todo.getProjects()[0].title != '') {
-        let title = todo.getProjects()[0].title;
-        updateProjectsScreen(li, title);
-    }
-}
-
-function handleProjectClick(todo) {
-    const listOfProject = document.querySelector('.projects-list');
-    let li = listOfProject.childNodes;
-
-    listOfProject.addEventListener('click', (e) => {
-        if (e.target.tagName == 'LI') {
-            let title = e.target.textContent.replace('x', '');
-            // let newProject = todo.getProject(title);
-             updateProjectsScreen(li, title);
-             updateTasksScreen(todo);
-            // return newProject;
-        }
-    });
-}
-
-function getCurrentProject(todo) {
-    const listOfProject = document.querySelector('.projects-list');
-    let li = listOfProject.childNodes;
-    let title;
-    let currentProject;
-
-    for (let i = 0; i < li.length; i++) { 
-        if(li[i].classList.contains('activeProject')) {
-            title = li[i].textContent.replace('x', '');
-            currentProject = todo.getProject(title);
-            return currentProject;
-        }
-    }
-
-}
 
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
@@ -233,6 +244,7 @@ export default function handleUI() {
     const form = document.getElementById('project-form');
     const addTodoBtn = document.querySelector('.add-todo-btn');
     const container = document.querySelector('.todo-container');
+    //const editBtn = document.
     const todo = new Todo();
 
     appendNewProject(todo.getProjects()[0].title);
@@ -250,16 +262,7 @@ export default function handleUI() {
     document.addEventListener('click', deleteProject);
     document.todo = todo;
 
-    //bug, enter doesnt submit the form, fix it 
-    form.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            if (document.getElementById('project-input').value.length < 3) {
-                alert('Enter title with 3 or more letters!');
-            } else {
-                addProject(e);
-            }
-        }
-    });
+    handleProjectClick(todo);
 
     //document.addEventListener('click', createTodoUI);
     addTodoBtn.addEventListener('click', showAddTodoDialog);
@@ -268,5 +271,5 @@ export default function handleUI() {
     container.addEventListener('click', deleteTask);
     container.todo = todo;
 
-    handleProjectClick(todo);
+  
 }
