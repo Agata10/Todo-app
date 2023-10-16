@@ -17,7 +17,25 @@ export default class Project {
     }
 
     addTask(task) {
+        if(this.tasks.some((p) => p.title === task.title)){
+            return;
+        }
         return this.tasks.push(task);
+    }
+
+    getTask(taskTitle) {
+        return this.tasks.find(tasks => tasks.title === taskTitle);
+    }
+    
+    editTask(title, newTitle, description, dueDate, priority) {
+       const task = this.getTask(title);
+       if(task){
+        task.title = newTitle;
+        task.description = description;
+        task.dueDate = dueDate;
+        task.priority = priority;
+        return task;
+       }
     }
 
     removeTask(taskTitle) {
@@ -27,6 +45,7 @@ export default class Project {
             }
         });
 
+    
 
     }
 

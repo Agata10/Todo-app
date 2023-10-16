@@ -278,6 +278,11 @@ span:hover {
     height: 350px;
  }
 
+ /* .addBtn,
+ .editBtn {
+    display: block;
+ } */
+
 /** FOOTER **/
 
 footer {

@@ -80,11 +80,10 @@ function inititializeProject(todo) {
     const listOfProject = document.querySelector('.projects-list');
     let li = listOfProject.childNodes;
 
-    // if((todo.getProjects().length === 0)) {
-    //     console.log(todo.getProjects())
-    //     updateProjectsScreen(li, '');
-    //     return;
- if(todo.getProjects()[0].title != '') {
+    if ((todo.getProjects().length == 0)) {
+        console.log(todo.getProjects())
+        return;
+    } else if (todo.getProjects()[0].title != '') {
         let title = todo.getProjects()[0].title;
         updateProjectsScreen(title);
     }
@@ -92,15 +91,12 @@ function inititializeProject(todo) {
 
 function handleProjectClick(todo) {
     const listOfProject = document.querySelector('.projects-list');
-    let li = listOfProject.childNodes;
 
     listOfProject.addEventListener('click', (e) => {
         if (e.target.tagName == 'LI') {
             let title = e.target.textContent.replace('x', '');
-            // let newProject = todo.getProject(title);
-             updateProjectsScreen(title);
-             updateTasksScreen(todo);
-            // return newProject;
+            updateProjectsScreen(title);
+            updateTasksScreen(todo);
         }
     });
 }
@@ -111,14 +107,14 @@ function getCurrentProject(todo) {
     let title;
     let currentProject;
 
-    for (let i = 0; i < li.length; i++) { 
-        if(li[i].classList.contains('activeProject')) {
+    for (let i = 0; i < li.length; i++) {
+        if (li[i].classList.contains('activeProject')) {
             title = li[i].textContent.replace('x', '');
             currentProject = todo.getProject(title);
             return currentProject;
+
         }
     }
-
 }
 
 function showHideDescriptionOnClick(e) {
@@ -143,13 +139,13 @@ function showHideDescriptionOnClick(e) {
 
 }
 
-function createTaskfromInput() {
+function getTaskfromInput() {
     const title = document.getElementById('title-input').value;
     const description = document.getElementById('description-input').value;
     const dueDate = document.getElementById('date-input').value;
     const priority = document.getElementById('priority-select').value;
 
-    let task = new Task(title, description, dueDate, priority);
+    let task = { title, description, dueDate, priority };
     return task;
 }
 
@@ -160,21 +156,29 @@ function appendTask(task) {
 
     todoContent.innerHTML = `<div id="priority"></div>
     <div id="info">
-        <div id="title">`+ task.title + `</div>
-        <div id="description" class="">`+ task.description + `</div>
+        <div class="title">`+ task.title + `</div>
+        <div class="description" class="">`+ task.description + `</div>
     </div>
-    <div id="edit"><button class="edit">edit</button></div>
-    <div id="date">`+ task.dueDate + `</div>
-    <div id="delete"><button class="delete">delete</button></div>`;
+    <div class="editDiv"><button class="edit">edit</button></div>
+    <div class="dateDiv">`+ task.dueDate + `</div>
+    <div class="deleteDiv"><button class="delete">delete</button></div>`;
 
     todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(task.priority);
     conatiner.appendChild(todoContent);
+
+    // const editTodoBtn = document.querySelector('.edit');  //edit Task listener
+    // editTodoBtn.addEventListener('click', editTask);
+    // //editTodoBtn.todo = todo;
 
 }
 
 function showAddTodoDialog() {
     const dialog = document.getElementById('todoDialog');
     const closeBtn = document.getElementById('closeBtn');
+    const confrimBtn = document.querySelector('.addBtn');
+    const editBtn = document.querySelector('.editBtn');
+    editBtn.classList.add('hidden');
+    confrimBtn.classList.remove('hidden');
     dialog.showModal();
 
     closeBtn.addEventListener('click', (e) => {
@@ -193,35 +197,134 @@ function handleAddingTask(todo) {
         e.preventDefault();
         li.forEach((list) => {
             if (list.classList.contains('activeProject')) {
-                let task = createTaskfromInput();
                 let currentProject = getCurrentProject(todo);
+                let input = getTaskfromInput();
+                let task = new Task(input.title, input.description, input.dueDate, input.priority);
+                if (currentProject.getTask(task.title)) {
+                    alert('Tasks can\'t have the same name');
+                }
                 currentProject.addTask(task);
-                console.log(currentProject);
+                console.log(currentProject); // delete later
                 updateTasksScreen(todo);
+                console.log('addign')
+
             }
+            dialog.close();
         });
-        dialog.close();
     });
+
 }
 
 function deleteTask(e) {
     let currentProject = getCurrentProject(e.currentTarget.todo);
 
-    if(e.target.tagName == 'BUTTON'){
-        if(e.target.classList.contains('delete')){
-           
-            let btn = e.target, div = btn.parentNode, contentDiv = div.parentNode, containerDiv = contentDiv.parentNode;
-            let title = contentDiv.childNodes[2].childNodes[1].textContent;
+    if (e.target.tagName == 'BUTTON') {
+        if (e.target.classList.contains('delete')) {
+            const contentDiv = e.target.parentNode.parentNode, containerDiv = contentDiv.parentNode;
+            const title = contentDiv.childNodes[2].childNodes[1].textContent;
             currentProject.removeTask(title);
             console.log(currentProject); //delete later
-            containerDiv.removeChild(contentDiv);   
+            containerDiv.removeChild(contentDiv);
+        }
     }
 }
+
+function showEditDialog(e) {
+    const dialog = document.getElementById('todoDialog');
+    const closeBtn = document.getElementById('closeBtn');
+
+    if (e.target.tagName == 'BUTTON') {
+
+        if (e.target.classList.contains('edit')) {
+            console.log('edit clicked')
+            let todo = e.currentTarget.todo;
+            const contentDiv = e.target.parentNode.parentNode;
+            const titleNode = contentDiv.childNodes[2].childNodes[1].textContent;
+            console.log(titleNode)
+            const confrimBtn = document.querySelector('.addBtn');
+            const editBtn = document.querySelector('.editBtn');
+            editBtn.classList.remove('hidden');
+            confrimBtn.classList.add('hidden');
+            dialog.showModal();
+            let editBtnClicked = false;
+
+            editBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const titleDivs = contentDiv.querySelectorAll('.title');
+                const priorityDiv = contentDiv.querySelector('#priority');
+                const descriptionDiv = contentDiv.querySelector('.description');
+                const dueDateDiv = contentDiv.querySelector('.dateDiv');
+
+                //appendEditedTask(contentDiv, editedTask, titleDiv);
+                let currentProject = getCurrentProject(todo);
+                const input = getTaskfromInput();
+                if ((input.title !== titleNode) && (currentProject.getTask(input.title))) {
+                    console.log(input.title)
+                    console.log(titleNode)
+                    alert('Taken');
+                    dialog.close();
+                    return;
+                } else {
+                    for (let i = 0; i < titleDivs.length; i++) {
+
+                        if (titleDivs[i].textContent === titleNode) {
+    
+                            let editedTask = currentProject.editTask(titleNode, input.title, input.description, input.dueDate, input.priority);
+    
+    
+                            console.log(contentDiv);
+                            titleDivs[i].textContent = input.title;
+                            console.log(titleDivs[i]);
+                            descriptionDiv.textContent = input.description;
+                            dueDateDiv.textContent = input.dueDate;
+                            priorityDiv.style.backgroundColor = editedTask.checkPriority(editedTask.priority);
+    
+                            console.log(todo)
+                            console.log('editing')
+                            editBtnClicked = true;
+    
+                            if (editBtnClicked) {
+                                editBtnClicked = false;
+                                dialog.close();
+                            };
+                        };
+    
+                    };
+                }
+
+            });
+
+
+        }
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dialog.close();
+        });
+
+
+    }
 }
 
-function editTask() {
+// function appendEditedTask(contentDiv, editedTask, previousTitle) {
+//     const titleDiv = document.querySelectorAll('.title');
 
-}
+//     titleDiv.forEach((title) =>  {
+//         if(title.textContent == previousTitle) {
+//             console.log(title)
+//             const priorityDiv = contentDiv.querySelector('#priority');
+//             const descriptionDiv = contentDiv.querySelector('.description');
+//             const dueDateDiv = contentDiv.querySelector('.dateDiv');
+
+//             title.textContent = editedTask.title;
+//             descriptionDiv.textContent = editedTask.description;
+//             dueDateDiv.textContent = editedTask.dueDate;
+//             priorityDiv.style.backgroundColor = editedTask.checkPriority(editedTask.priority);
+//         }
+
+//     })
+
+// }
+
 
 function updateTasksScreen(todo) {
     const container = document.querySelector('.todo-container');
@@ -231,12 +334,14 @@ function updateTasksScreen(todo) {
     }
 
     let currentProject = getCurrentProject(todo);
-    let tasks = currentProject.getTasks();
-    tasks.forEach((task) => appendTask(task));
+    if (currentProject) {
+        let tasks = currentProject.getTasks();
+        tasks.forEach((task) => appendTask(task));
+    } else {
+        return; //if project doesnt exists
+    }
 
 }
-
-
 
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
@@ -244,12 +349,15 @@ export default function handleUI() {
     const form = document.getElementById('project-form');
     const addTodoBtn = document.querySelector('.add-todo-btn');
     const container = document.querySelector('.todo-container');
-    //const editBtn = document.
+
     const todo = new Todo();
 
     appendNewProject(todo.getProjects()[0].title);
     appendNewProject(todo.getProjects()[1].title);
     todo.getProjects()[0].addTask(new Task('elo', 'jestem', '2023-12-12', 'Low'));
+    todo.getProjects()[0].addTask(new Task('second', 'secy', '2023-12-12', 'Medium'));
+    todo.getProjects()[0].addTask(new Task('third', 'thirdy', '2023-12-12', 'High'));
+    todo.getProjects()[1].addTask(new Task('ela', 'jestem', '2023-12-12', 'High'));
     inititializeProject(todo);
     updateTasksScreen(todo);
 
@@ -265,11 +373,14 @@ export default function handleUI() {
     handleProjectClick(todo);
 
     //document.addEventListener('click', createTodoUI);
-    addTodoBtn.addEventListener('click', showAddTodoDialog);
-    handleAddingTask(todo);
+    addTodoBtn.addEventListener('click', showAddTodoDialog, handleAddingTask(todo));
+    // handleAddingTask(todo);
+
 
     container.addEventListener('click', deleteTask);
     container.todo = todo;
 
-  
+    container.addEventListener('click', showEditDialog);
+    container.todo = todo;
+
 }
