@@ -27,8 +27,8 @@ export default class Project {
         return this.tasks.find(tasks => tasks.title === taskTitle);
     }
     
-    editTask(title, newTitle, description, dueDate, priority) {
-       const task = this.getTask(title);
+    editTask(taskTitle, newTitle, description, dueDate, priority) {
+       const task = this.getTask(taskTitle);
        if(task){
         task.title = newTitle;
         task.description = description;
