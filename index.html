@@ -35,11 +35,11 @@
                 <img src="./images/plus2.svg" alt="plus icon">
                 Add Todo</button>
         </div>
-        <!--dialog for adding task-->
+        <!--dialog for adding/editing task-->
         <dialog id="todoDialog">
             <form id="todoForm" name="todoForm" method="post">
               <input type="text" id="title-input" minlength="3" maxlength="10" placeholder="Title..." required>
-              <input type="texarea" id="description-input" minlength="3" maxlength="30" placeholder="Description..." required>
+              <textarea id="description-input" minlength="3" maxlength="30" placeholder="Description..." required></textarea>
               <input type="date" id="date-input" required>
               <label for="priority-select">Choose priority:</label>
               <select name="priority" id="priority-select">
@@ -51,24 +51,6 @@
                 <button id="closeBtn" type="button">Cancel</button>
                 <button id="confirmBtn" type="submit" class="addBtn">Confirm</button>
                 <button id="confirmEditBtn" type="submit" class="editBtn">Edit</button>
-              </div>
-            </form>
-          </dialog>
-          <!--dialog for editing task-->
-          <dialog id="editDialog">
-            <form id="editForm" name="editForm" method="post">
-              <input type="text" id="title-ed-input" minlength="3" maxlength="10" placeholder="Title..." required>
-              <input type="texarea" id="description-ed-input" minlength="3" maxlength="30" placeholder="Description..." required>
-              <input type="date" id="date-ed-input" required>
-              <label for="priority-ed-select">Choose priority:</label>
-              <select name="priority" id="priority-ed-select">
-                <option>Low</option>
-                <option selected>Medium</option>
-                <option>High</option>
-              </select>
-              <div>
-                <button id="closeEditBtn" type="button">Cancel</button>
-                <button id="confirmEditBtn" type="submit" class="editBtn">Confirm</button>
               </div>
             </form>
           </dialog>
