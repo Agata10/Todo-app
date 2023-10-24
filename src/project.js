@@ -16,6 +16,10 @@ export default class Project {
         return this.tasks;
     }
 
+    setTasks(tasks) {
+        this.tasks = tasks;
+    }
+
     addTask(task) {
         if(this.tasks.some((p) => p.title === task.title)){
             return;

@@ -1,6 +1,7 @@
 import Project from "./project";
 import Todo from "./Todo";
 import Task from "./Task";
+import { setTodoInLocalStorage, removeProjectFromLocalStroage, removeTaskFromLocalStorage, getProjectsFromLocalStroage, getTasksFromLocalStroage } from "./Storage";
 
 function showProjectForm() {
     const form = document.getElementById('project-form');
@@ -20,20 +21,20 @@ function addProject(e) {
     const titleInput = document.getElementById('project-input');
     let todo = e.currentTarget.todo;
 
-    if (todo.getProject(titleInput.value)) {
+    if (todo.getProject(titleInput.value.charAt(0).toUpperCase() + titleInput.value.slice(1).toLowerCase())) {
         alert('The project with this name already exists!');
         return;
     }
 
-    const newProject = new Project(titleInput.value);
+    const newProject = new Project(titleInput.value.charAt(0).toUpperCase() + titleInput.value.slice(1).toLowerCase());
     appendNewProject(newProject.projectTitle);
     todo.addProject(newProject); //add project to Todo
-    localStorage.setItem('todo', JSON.stringify(todo));
+
     console.log(todo.getProjects()); //delete later
 
     updateProjectsScreen(newProject.projectTitle); //switch to new project
     updateTasksScreen(todo);
-
+    setTodoInLocalStorage(todo);
 
 }
 
@@ -118,26 +119,39 @@ function getCurrentProject(todo) {
 }
 
 function showHideDescriptionOnClick(e) {
-    const container = document.querySelectorAll('.todo-content');
-    let click = false;
 
-    // container.forEach((todo) => {
-    //     todo.currentTarget.addEventListener('click', () => {
-    //         const description = document.getElementById('description');
-    //         const info = document.getElementById('info');
-    //         if(click === false) {
-    //             description.classList.remove('invisible');
-    //             info.classList.add('visible');
-    //             click = true;
-    //         }else {
-    //             click = false;
-    //             info.classList.remove('visible');
-    //             description.classList.add('invisible');
-    //         }
-    //     });
-    // });
+    if (e.target.tagName == 'DIV') {
+    if (e.target.id === 'info') {
+        const conatiner = e.target;
+        console.log(conatiner)
+        const descriptionDiv = document.querySelector('.description');
+        if(click == true) {
+            descriptionDiv.classList.remove('hidden');
+            click = false;
+        } else {
+            descriptionDiv.classList.add('hidden');
+            click = true;
+        }
+       
+    } else if(e.target.classList.contains('title') ||
+    e.target.classList.contains('description')) {
+        const container = e.target.parentNode;
+        const descriptionDiv = container.querySelector('.description');
+        console.log(e.target)
+        if(descriptionDiv.classList.contains('hidden')) {
+            descriptionDiv.classList.remove('hidden');
+        } else {
+            descriptionDiv.classList.add('hidden');
+        }
+       
+          
+        }
+      
+        }
+       
+    }
 
-}
+   
 
 function getTaskfromInput() {
     const title = document.getElementById('title-input').value;
@@ -162,7 +176,7 @@ function appendTask(task) {
     <div class="editDiv"><button class="edit">edit</button></div>
     <div class="dateDiv">`+ task.dueDate + `</div>
     <div class="deleteDiv"><button class="delete">delete</button></div>`;
-
+   
     todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(task.priority);
     conatiner.appendChild(todoContent);
 }
@@ -198,15 +212,15 @@ function handleAddingTask(todo) {
                 if (list.classList.contains('activeProject')) {
                     const currentProject = getCurrentProject(todo);
                     const input = getTaskfromInput();
-                    const task = new Task(input.title, input.description, input.dueDate, input.priority);
-                    if (currentProject.getTask(task.title)) {
+                    const task = new Task(input.title.toLowerCase(), input.description, input.dueDate, input.priority);
+                    if (currentProject.getTask(task.title.toLowerCase())) {
                         alert('Tasks can\'t have the same name');
                     }
                     currentProject.addTask(task);
-                    localStorage.setItem('todo', JSON.stringify(todo));
                     console.log(currentProject); // delete later
                     updateTasksScreen(todo);
                     console.log('addign') //delete later
+                    setTodoInLocalStorage(todo);
 
                 }
                 dialog.close();
@@ -267,20 +281,20 @@ function editTodo(e, todo) {
                     let currentProject = getCurrentProject(todo);
                     const input = getTaskfromInput();
 
-                   
+
                     if (currentProject.getTask(titleDivs.textContent)) {
-                        if(input.title != titleDivs.textContent) {
-                            if(currentProject.getTask(input.title)){
+                        if (input.title != titleDivs.textContent) {
+                            if (currentProject.getTask(input.title)) {
                                 alert('Tasks can\'t have the same names!');
                                 return;
                             }
                         }
                         let editedTask = currentProject.editTask(titleDivs.textContent, input.title, input.description, input.dueDate, input.priority);
-                        titleDivs.textContent = input.title;
+                        titleDivs.textContent = input.title.toLowerCase();
                         descriptionDiv.textContent = input.description;
                         dueDateDiv.textContent = input.dueDate;
                         priorityDiv.style.backgroundColor = editedTask.checkPriority(input.priority);
-                        localStorage.setItem('todo', JSON.stringify(todo));
+                        setTodoInLocalStorage(todo);
                         console.log(todo) //delete later
                         console.log('editing')
                         clicked = false;
@@ -304,7 +318,7 @@ function updateTasksScreen(todo) {
         container.removeChild(container.firstChild);
     }
 
-    let currentProject = getCurrentProject(todo);
+    const currentProject = getCurrentProject(todo);
     if (currentProject) {
         let tasks = currentProject.getTasks();
         tasks.forEach((task) => appendTask(task));
@@ -314,35 +328,6 @@ function updateTasksScreen(todo) {
 
 }
 
-function removeProjectFromLocalStroage(title) {
-    let todo = JSON.parse(localStorage.getItem('todo'));
-   
-    for (let i = 0; i < todo.projects.length; i++) {
-        if (todo.projects[i].title === title) {
-            todo.projects.splice(i, 1);
-        }
-    }
-    todo = JSON.stringify(todo);
-    localStorage.setItem('todo', todo);
-}
-
-function removeTaskFromLocalStorage(currentProjectName, taskName) {
-    let todo = JSON.parse(localStorage.getItem('todo'));
-   
-    for (let i = 0; i < todo.projects.length; i++) {
-        if (todo.projects[i].title === currentProjectName) {
-            let project = todo.projects[i];
-            for(let j = 0; j < project.tasks.length; j++) {
-                if(project.tasks[j].title === taskName) {
-                    project.tasks.splice(j, 1);
-                }
-            }
-        }
-    }
-    todo = JSON.stringify(todo);
-    localStorage.setItem('todo', todo);
-}
-
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
     const cancelProjectBtn = document.getElementById('cancel-add-project');
@@ -350,25 +335,38 @@ export default function handleUI() {
     const addTodoBtn = document.querySelector('.add-todo-btn');
     const container = document.querySelector('.todo-container');
 
-    const todo = new Todo();
+    let todo = new Todo();
 
-    appendNewProject(todo.getProjects()[0].title);
-    appendNewProject(todo.getProjects()[1].title);
-    todo.getProjects()[0].addTask(new Task('elo', 'jestem', '2023-12-12', 'Low'));
-    todo.getProjects()[0].addTask(new Task('second', 'secy', '2023-12-12', 'Medium'));
-    todo.getProjects()[0].addTask(new Task('third', 'thirdy', '2023-12-12', 'High'));
-    todo.getProjects()[1].addTask(new Task('ela', 'jestem', '2023-12-12', 'High'));
-    inititializeProject(todo);
-    localStorage.setItem('todo', JSON.stringify(todo));
-    updateTasksScreen(todo);
-
-    window.onload = function() {
+    window.onload = function () {
         if (!localStorage.getItem('todo')) {
-            return;
-          } else {
-            //setTodo();
-          }
-    };
+
+            todo.getProjects()[0].addTask(new Task('elo', 'jestem', '2023-12-12', 'Low'));
+            todo.getProjects()[0].addTask(new Task('second', 'secy', '2023-12-12', 'Medium'));
+            todo.getProjects()[0].addTask(new Task('third', 'thirdy', '2023-12-12', 'High'));
+            todo.getProjects()[1].addTask(new Task('ela', 'jestem', '2023-12-12', 'High'));
+            setTodoInLocalStorage(todo);
+
+        } else {
+
+            todo.setProjects(getProjectsFromLocalStroage().projects);
+            let projects = getProjectsFromLocalStroage().projects;
+            todo.getProjects().forEach((project) => {
+                projects.forEach((p) => {
+                    if (project.title === p.title) {
+                        p.tasks.forEach((task) => {
+                            project.addTask(new Task(task.title, task.description, task.dueDate, task.priority));
+                        });
+                    }
+
+                });
+            });
+        }
+        todo.getProjects().forEach((project) => {
+            appendNewProject(project.title);
+        });
+        inititializeProject(todo);
+        updateTasksScreen(todo);
+    }
 
     addProjectBtn.addEventListener('click', showProjectForm);
     cancelProjectBtn.addEventListener('click', cancelProjectForm);
@@ -390,5 +388,5 @@ export default function handleUI() {
         editTodo(e, todo);
     });
 
-
+    document.addEventListener('click', showHideDescriptionOnClick);
 }

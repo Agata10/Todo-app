@@ -7,9 +7,15 @@ export default class Todo {
         this.projects.push(new Project('Gym'));
     }
 
-    // setProjects(projects) {
-    //     this.projects = projects;
-    // }
+    setProjects(projects) {
+        projects.forEach((project) => {
+            if(this.projects.some((p) => p.title === project.title)){
+                return;
+            }
+            this.projects.push(new Project(`${project.title}`));
+        })
+        return this.projects;
+    }
 
     getProjects() {
         return this.projects;

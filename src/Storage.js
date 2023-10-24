@@ -1,3 +1,9 @@
+
+
+export function setTodoInLocalStorage(todo) {
+    localStorage.setItem('todo', JSON.stringify(todo));
+}
+
 export function removeProjectFromLocalStroage(title) {
     let todo = JSON.parse(localStorage.getItem('todo'));
    
@@ -24,6 +30,23 @@ export function removeTaskFromLocalStorage(currentProjectName, taskName) {
         }
     }
     todo = JSON.stringify(todo);
-    localStorage.setItem('todo', todo);
+    window.localStorage.setItem('todo', todo);
 }
 
+export function getProjectsFromLocalStroage() {
+    let todo = JSON.parse(localStorage.getItem('todo')) || [];
+    return todo;
+}
+
+// export function getTasksFromLocalStroage(currentProjectName) {
+//     let todo = JSON.parse(localStorage.getItem('todo')) || [];
+
+//     for (let i = 0; i < todo.projects.length; i++) {
+//         if (todo.projects[i].title === currentProjectName) {
+//             let project = todo.projects[i];
+//                 return project.tasks;
+//                 }
+//         }
+       
+    
+// }
