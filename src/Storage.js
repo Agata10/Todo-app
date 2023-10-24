@@ -1,5 +1,3 @@
-
-
 export function setTodoInLocalStorage(todo) {
     localStorage.setItem('todo', JSON.stringify(todo));
 }
@@ -38,15 +36,3 @@ export function getProjectsFromLocalStroage() {
     return todo;
 }
 
-// export function getTasksFromLocalStroage(currentProjectName) {
-//     let todo = JSON.parse(localStorage.getItem('todo')) || [];
-
-//     for (let i = 0; i < todo.projects.length; i++) {
-//         if (todo.projects[i].title === currentProjectName) {
-//             let project = todo.projects[i];
-//                 return project.tasks;
-//                 }
-//         }
-       
-    
-// }

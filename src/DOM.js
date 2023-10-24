@@ -29,9 +29,6 @@ function addProject(e) {
     const newProject = new Project(titleInput.value.charAt(0).toUpperCase() + titleInput.value.slice(1).toLowerCase());
     appendNewProject(newProject.projectTitle);
     todo.addProject(newProject); //add project to Todo
-
-    console.log(todo.getProjects()); //delete later
-
     updateProjectsScreen(newProject.projectTitle); //switch to new project
     updateTasksScreen(todo);
     setTodoInLocalStorage(todo);
@@ -83,7 +80,6 @@ function updateProjectsScreen(title) {
 
 function inititializeProject(todo) {
     if ((todo.getProjects().length == 0)) {
-        console.log(todo.getProjects()) // delete later
         return;
     } else if (todo.getProjects()[0].title != '') {
         let title = todo.getProjects()[0].title;
@@ -121,37 +117,19 @@ function getCurrentProject(todo) {
 function showHideDescriptionOnClick(e) {
 
     if (e.target.tagName == 'DIV') {
-    if (e.target.id === 'info') {
-        const conatiner = e.target;
-        console.log(conatiner)
-        const descriptionDiv = document.querySelector('.description');
-        if(click == true) {
-            descriptionDiv.classList.remove('hidden');
-            click = false;
-        } else {
-            descriptionDiv.classList.add('hidden');
-            click = true;
+        if (e.target.classList.contains('title') ||
+            e.target.classList.contains('description')) {
+            const container = e.target.parentNode;
+            const descriptionDiv = container.querySelector('.description');
+            console.log(e.target)
+            if (descriptionDiv.classList.contains('hidden')) {
+                descriptionDiv.classList.remove('hidden');
+            } else {
+                descriptionDiv.classList.add('hidden');
+            }
         }
-       
-    } else if(e.target.classList.contains('title') ||
-    e.target.classList.contains('description')) {
-        const container = e.target.parentNode;
-        const descriptionDiv = container.querySelector('.description');
-        console.log(e.target)
-        if(descriptionDiv.classList.contains('hidden')) {
-            descriptionDiv.classList.remove('hidden');
-        } else {
-            descriptionDiv.classList.add('hidden');
-        }
-       
-          
-        }
-      
-        }
-       
     }
-
-   
+}
 
 function getTaskfromInput() {
     const title = document.getElementById('title-input').value;
@@ -176,7 +154,7 @@ function appendTask(task) {
     <div class="editDiv"><button class="edit">edit</button></div>
     <div class="dateDiv">`+ task.dueDate + `</div>
     <div class="deleteDiv"><button class="delete">delete</button></div>`;
-   
+
     todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(task.priority);
     conatiner.appendChild(todoContent);
 }
@@ -217,9 +195,7 @@ function handleAddingTask(todo) {
                         alert('Tasks can\'t have the same name');
                     }
                     currentProject.addTask(task);
-                    console.log(currentProject); // delete later
                     updateTasksScreen(todo);
-                    console.log('addign') //delete later
                     setTodoInLocalStorage(todo);
 
                 }
@@ -238,7 +214,6 @@ function deleteTask(e) {
             const title = contentDiv.childNodes[2].childNodes[1].textContent;
             removeTaskFromLocalStorage(currentProject.title, title);
             currentProject.removeTask(title);
-            console.log(currentProject); //delete later
             containerDiv.removeChild(contentDiv);
         }
     }
@@ -255,7 +230,6 @@ function editTodo(e, todo) {
         if (e.target.classList.contains('edit')) {
             let contentDiv = e.target.parentNode.parentNode;
             console.log(contentDiv)
-            //let titleNode = contentDiv.childNodes[2].childNodes[1].textContent;
             let titleDivs = contentDiv.querySelector('.title');
             let priorityDiv = contentDiv.querySelector('#priority');
             let descriptionDiv = contentDiv.querySelector('.description');
@@ -263,9 +237,6 @@ function editTodo(e, todo) {
 
             const confrimBtn = document.querySelector('.addBtn');
             const editBtn = document.querySelector('.editBtn');
-
-            console.log(titleDivs.textContent) //delete later
-
             dialog.showModal();
             editBtn.classList.remove('hidden');
             confrimBtn.classList.add('hidden');
@@ -295,8 +266,6 @@ function editTodo(e, todo) {
                         dueDateDiv.textContent = input.dueDate;
                         priorityDiv.style.backgroundColor = editedTask.checkPriority(input.priority);
                         setTodoInLocalStorage(todo);
-                        console.log(todo) //delete later
-                        console.log('editing')
                         clicked = false;
                     }
                     dialog.close();
