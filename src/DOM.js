@@ -151,9 +151,9 @@ function appendTask(task) {
         <div class="title">`+ task.title + `</div>
         <div class="description" class="">`+ task.description + `</div>
     </div>
-    <div class="editDiv"><button class="edit">edit</button></div>
+    <div class="editDiv"><button class="edit"></button></div>
     <div class="dateDiv">`+ task.dueDate + `</div>
-    <div class="deleteDiv"><button class="delete">delete</button></div>`;
+    <div class="deleteDiv"><button class="delete"></button></div>`;
 
     todoContent.querySelector('#priority').style.backgroundColor = task.checkPriority(task.priority);
     conatiner.appendChild(todoContent);
@@ -297,6 +297,15 @@ function updateTasksScreen(todo) {
 
 }
 
+function showSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    let witdh = window.innerWidth;
+    
+    sidebar.classList.toggle('active');
+
+   //sidebar.style.display = 'block';
+
+    }
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
     const cancelProjectBtn = document.getElementById('cancel-add-project');
@@ -358,4 +367,8 @@ export default function handleUI() {
     });
 
     document.addEventListener('click', showHideDescriptionOnClick);
+
+    const collapseBtn = document.getElementById('collapse');
+    collapseBtn.addEventListener('click', showSidebar);
+
 }

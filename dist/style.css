@@ -33,7 +33,6 @@ header {
 
     display: flex;
     align-items: center;
-    gap: 10px;
     padding-left: 40px;
 }
 
@@ -47,6 +46,12 @@ header h1 {
 .logo-img {
     position: relative;
     top: -3px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /** MAIN **/
@@ -66,6 +71,10 @@ main {
     padding-top: 40px;
     display: grid;
     grid-template-rows: 5fr 1fr;
+}
+
+.sidebar.active {
+    display: grid;
 }
 
 .first-row {
@@ -105,7 +114,6 @@ ul li:hover {
 .activeProject {
     background-color: whitesmoke;
     border-radius: 8px;
-    transform: translateX(6px);
     font-size: 1.7rem;
 }
 
@@ -199,7 +207,7 @@ span:hover {
     display: flex;
     flex-direction: column;
     width: calc(100vw - 200px);
-    min-height: calc(100%);
+    max-height: calc(100vh - 70px);
     padding-top: 20px;
 }
 
@@ -215,7 +223,6 @@ span:hover {
     padding-bottom: 10px;
     border: none;
     border-radius: 8px;
-
 }
 
 .todo-container {
@@ -223,14 +230,17 @@ span:hover {
     flex-direction: column;
     width: calc(100vw - 200px);
     gap: 10px;
-    min-height: calc(100% - 40px);
+    max-height: calc(100vh - 40px);
+    overflow: scroll;
+    padding-bottom: 20px;
 }
 
 .todo-content {
     margin: 0 auto;
-    width: 50%;
+    width: 45vw;
     display: grid;
-    grid-template-columns: 0.5fr 6fr 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-columns: 0.5fr 6fr 0.6fr 1.5fr 0.6fr;
     box-shadow: 4px 4px 3px -3px var(--main-color);
     align-items: center;
     height: 50px;
@@ -246,20 +256,37 @@ span:hover {
     margin-right: 5px;
 }
 
-.invisible {
-    display: none;
-    grid-template-rows: 1fr;
+.dateDiv {
+    font-size: 1rem;
 }
 
-#info .visible {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    align-items: center;
-    gap: 2px;
-}
-
-#description {
+.description {
     font-size: 0.8rem;
+}
+
+.description,
+.title {
+    cursor: pointer;
+}
+
+.delete {
+    background: url(./images/x-square.svg);
+}
+
+.edit {
+    background: url(./images/pencil-square.svg);
+}
+
+.edit,
+.delete {
+    border: none;
+    background-color: inherit;
+    width: 20px;
+    height: 30px;
+    cursor: pointer;
+   
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
  /** ADD TODO DIALOG **/
@@ -270,18 +297,13 @@ span:hover {
     left: 45%;
  }
 
- #todoDialog > form{
+ #todoDialog > form {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    width: 400px;
-    height: 350px;
+    width: 350px;
+    height: 400px;
  }
-
- /* .addBtn,
- .editBtn {
-    display: block;
- } */
 
 /** FOOTER **/
 
@@ -303,3 +325,153 @@ footer p {
     font-weight: 500;
     margin: 0;
 }
+
+/*QUERIES*/
+
+@media screen and (max-width: 660px) {
+
+    main {
+        display: flex;
+        flex-direction: column;
+        overflow: scroll;
+    }
+
+    /* HEADER */
+    header {
+        justify-content: space-between;
+        padding: 0px 10px;
+    }
+
+    #collapse {
+        display: block;
+        background: url(./images/list.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 35px;
+        height: 35px;
+        border: none;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar {
+        display: none;
+        width: 100vw;
+        max-height: 40vh;
+        overflow: scroll;
+        padding-top: 10px;
+    }
+
+    .first-row {
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        gap: 3px;
+        margin: 0 auto;
+        
+    }
+ 
+    .first-row h1 {
+        font-size: 1.3rem;
+    }
+
+    .first-row ul li {
+        font-size: 1.2rem;
+    }
+
+    .add-project-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        width: 120px;
+        height: 30px;
+        margin-top: 0px;
+    }
+
+    .add-project-btn img,
+    .add-todo-btn img {
+        width: 24px;
+        height: 24px;   
+        top: -2px;
+    }
+
+    .add-todo-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 30px;
+        font-size: 1rem;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        margin-top: 8px;
+        margin-left: 22px;
+    }
+    
+    /* TODO */
+    
+    .main-content {
+        width: 100vw;
+        min-height: calc(100vh - 70px);
+    }
+
+    .todo-container {
+        margin: 0 auto;
+        width: 100vw;
+        min-height: calc(60vh - 40px);
+        max-height: calc(100vh - 40px);
+    } 
+
+    .todo-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 10px 2fr 30px 20px 30px;
+        min-height: 120px;
+        max-width: 50vh;
+        justify-items: center;
+        align-items: center;
+       
+    }
+
+    #priority {
+        width: 100%;
+        height: 10px;
+        margin-right: 0px;
+    }
+
+    .description {
+       display: none;
+    }
+
+    .dateDiv {
+        font-size: 0.8rem;
+    }
+
+    footer p {
+        font-size: 0.8rem;
+    }
+
+    /* TODO DIALOG*/
+
+    #todoDialog {
+        position: relative;
+        top: 25%;
+        left: 5%;
+     }
+    
+}
+
+@media screen and (min-width: 661px) and (max-width: 992px) {
+    .main-content {
+        width: 100vw;
+        min-height: calc(100vh - 70px);
+    }
+    .todo-content {
+        width: 60vw;
+        margin: 0 auto;
+        width: 50vw;
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns:  0.5fr 3fr 0.6fr 1.5fr 0.6fr;
+    }
+}  
