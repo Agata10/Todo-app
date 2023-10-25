@@ -295,16 +295,105 @@ span:hover {
     position: relative;
     top: 25%;
     left: 45%;
+    border-radius: 12px;
+    width: 280px;
+    height: 350px;
+    background-color: rgb(245, 241, 241);
+    border: none;
+    box-shadow: 0px 10px 10px 10px rgba(105, 100, 100, 0.5);
  }
 
  #todoDialog > form {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    width: 350px;
-    height: 400px;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    gap: 20px;
  }
 
+ form > * {
+    width: 250px;
+    background-color: inherit;
+    border: 1px solid var(--main-color);
+    box-shadow: 0px 1px 1px 1px rgba(66, 62, 62, 0.5);
+ }
+
+#title-input {
+    height: 40px;
+    border-radius: 8px;
+    background-color: rgb(245, 241, 241);
+ }
+
+ #description-input {
+    height: 60px;
+    border-radius: 8px;
+ }
+
+ #title-input::placeholder,
+ #description-input::placeholder {
+    padding-left: 5px;
+    font-size: 1.2rem;
+    font-family: var(--nav-basic-font);
+    color: var(--main-color);
+    background-color: inherit;
+ }
+
+ #date-input {
+    height: 30px;
+    font-size: 1rem;
+    font-family: var(--nav-basic-font);
+    border-radius: 8px;
+ }
+
+ form label {
+    border: none;
+    box-shadow: none;
+    font-size: 1rem;
+    font-family: var(--nav-basic-font);
+    color: var(--main-color);
+    background-color: inherit;
+ }
+
+ #priority-select {
+    margin-left: 10px;
+    margin-top: 0px;
+    padding-top: 0px;
+    height: 30px;
+    width: 100px;
+    font-size: 1rem;
+    font-family: var(--nav-basic-font);
+    outline: none;
+    border-radius: 8px;
+    background-color: inherit;
+    border: 1px solid var(--main-color);
+ }
+
+ form > *:focus {
+    outline: none;
+    border: 2px solid black;
+ } 
+
+ form > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 240px;
+    border: none;
+    box-shadow: none;
+ }
+
+ form button {
+    height: 40px;
+    width: 120px;
+    font-size: 1.2rem;
+    font-family: var(--nav-basic-font);
+    border-radius: 8px;
+    background-color: var(--main-color);
+    color: whitesmoke;
+    border: none;
+ }
 /** FOOTER **/
 
 footer {
@@ -454,9 +543,8 @@ footer p {
     /* TODO DIALOG*/
 
     #todoDialog {
-        position: relative;
         top: 25%;
-        left: 5%;
+        left: 15%;
      }
     
 }
@@ -474,4 +562,9 @@ footer p {
         grid-template-rows: 1fr;
         grid-template-columns:  0.5fr 3fr 0.6fr 1.5fr 0.6fr;
     }
+
+    #todoDialog {
+        top: 25%;
+        left: 35%;
+     }
 }  

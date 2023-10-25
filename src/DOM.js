@@ -299,13 +299,9 @@ function updateTasksScreen(todo) {
 
 function showSidebar() {
     const sidebar = document.querySelector('.sidebar');
-    let witdh = window.innerWidth;
-    
     sidebar.classList.toggle('active');
+}
 
-   //sidebar.style.display = 'block';
-
-    }
 export default function handleUI() {
     const addProjectBtn = document.querySelector('.add-project-btn');
     const cancelProjectBtn = document.getElementById('cancel-add-project');
