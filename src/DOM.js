@@ -314,10 +314,10 @@ export default function handleUI() {
     window.onload = function () {
         if (!localStorage.getItem('todo')) {
 
-            todo.getProjects()[0].addTask(new Task('elo', 'jestem', '2023-12-12', 'Low'));
-            todo.getProjects()[0].addTask(new Task('second', 'secy', '2023-12-12', 'Medium'));
-            todo.getProjects()[0].addTask(new Task('third', 'thirdy', '2023-12-12', 'High'));
-            todo.getProjects()[1].addTask(new Task('ela', 'jestem', '2023-12-12', 'High'));
+            todo.getProjects()[0].addTask(new Task('do laundry', 'or have no clothes to wear', '2023-10-25', 'High'));
+            todo.getProjects()[0].addTask(new Task('do shopping', 'till friday', '2023-10-27', 'Medium'));
+            todo.getProjects()[0].addTask(new Task('bake a birthday cake', 'for Josie', '2023-12-12', 'Low'));
+            todo.getProjects()[1].addTask(new Task('change workout', 'figure out new routine', '2023-01-01', 'High'));
             setTodoInLocalStorage(todo);
 
         } else {
