@@ -47,7 +47,7 @@ The websites has 'default' projects that user can use to assign to them todos wh
 User can:
 1. add/remove projects
 2. add/edit/remove todos to each project
-3. when clicked on todo, user can hide/udhide the description of todo.
+3. when clicked on todo, user can hide/unhide the description of todo.
 
 ## Icons
 
