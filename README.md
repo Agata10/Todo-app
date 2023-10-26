@@ -27,7 +27,7 @@ The main task was practicing modules in JS(ES6), npm, webpack and DOM manipulati
 ![Wepage](./dist/images/laptop.png)
 
 ## Link to game
-
+https://agata10.github.io/Todo-app/
 
 ## Setup
 
