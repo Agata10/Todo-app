@@ -218,6 +218,12 @@ function deleteTask(e) {
         }
     }
 }
+function appendTaskInInput(task) {
+    document.getElementById('title-input').value = task.title;
+    document.getElementById('description-input').value = task.description;
+    document.getElementById('date-input').value = task.dueDate;
+    document.getElementById('priority-select').value = task.priority;
+}
 
 function editTodo(e, todo) {
     const dialog = document.getElementById('todoDialog');
@@ -234,24 +240,26 @@ function editTodo(e, todo) {
             let priorityDiv = contentDiv.querySelector('#priority');
             let descriptionDiv = contentDiv.querySelector('.description');
             let dueDateDiv = contentDiv.querySelector('.dateDiv');
+         
 
             const confrimBtn = document.querySelector('.addBtn');
             const editBtn = document.querySelector('.editBtn');
             dialog.showModal();
+            let currentProject = getCurrentProject(todo);
             editBtn.classList.remove('hidden');
             confrimBtn.classList.add('hidden');
             editBtn.disabled = false;
             confrimBtn.disabled = true;
-
+            
             clicked = true;
+
+            appendTaskInInput(currentProject.getTask(titleDivs.textContent));
 
             form.addEventListener('submit', (e) => {
 
                 if (confrimBtn.classList.contains('hidden') && clicked) {
                     e.preventDefault();
-                    let currentProject = getCurrentProject(todo);
                     const input = getTaskfromInput();
-
 
                     if (currentProject.getTask(titleDivs.textContent)) {
                         if (input.title != titleDivs.textContent) {
